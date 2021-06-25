@@ -1,5 +1,5 @@
-const client = require('./index.js');
 const path = require('path');
+const client = require('./index');
 
 const seedCSV = (table) => {
   // ext ? ext : 'csv';
@@ -10,9 +10,9 @@ const seedCSV = (table) => {
     FROM '${source}'
     NULL 'null'
     DELIMITER ','
-    CSV HEADER`
-    )
-    .then((res) => console.log('seeded successfully'))
+    CSV HEADER`,
+  )
+    .then(() => console.log('seeded successfully'))
     .catch((err) => console.log('err', err));
 };
 
@@ -25,12 +25,11 @@ const seedCSVRelated = (table) => {
     FROM '${source}'
     NULL '0'
     DELIMITER ','
-    CSV HEADER`
-    )
-    .then((res) => console.log('seeded successfully'))
+    CSV HEADER`,
+  )
+    .then(() => console.log('seeded successfully'))
     .catch((err) => console.log('err', err));
 };
-
 
 // seedCSV('products');
 // seedCSV('styles');
