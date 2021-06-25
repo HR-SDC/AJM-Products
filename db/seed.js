@@ -35,8 +35,9 @@ const seedCSVRelated = (table) => {
 // seedCSV('products');
 // seedCSV('styles');
 // seedCSV('skus');
-seedCSV('relatedarr');
+// seedCSV('relatedarr');
 // seedCSVRelated('related');
+seedCSV('photos');
 
 
 // seedCSV('cart');
