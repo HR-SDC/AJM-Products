@@ -81,14 +81,18 @@ readStream.on('line', (line) => {
     writeStream.write(`${productId},${feature},${value}` + '\n');
   } else if ((id !== 'id') && (productId === current)) {
     // featArr.push('{' + feature, value + '}');
-    featArr.push(`{${feature},${value}}`);
-    features.push(featArr);
+    // featArr.push(`{${feature},${value}}`);
+    // featArr.push(`${feature},${value}`);
+    // features.push(featArr);
+    features.push(feature, value);
   } else if ((id !== 'id') && (productId !== current)) {
     writeStream.write(`${current},"{${features}}"` + '\n');
     current = productId;
     features = [];
-    featArr.push(`{${feature},${value}}`);
-    features.push(featArr);
+    // featArr.push(`{${feature},${value}}`);
+    // featArr.push(`${feature}, ${value}`);
+    // features.push(featArr);
+    features.push(feature, value);
   }
 });
 
