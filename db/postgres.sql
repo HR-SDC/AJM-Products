@@ -182,7 +182,7 @@ CREATE TABLE products.features
     id SERIAL,
     product_id integer NOT NULL,
     feature character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    value character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    value character varying(50) COLLATE pg_catalog."default",
     CONSTRAINT features_pkey PRIMARY KEY (id),
     CONSTRAINT prod_fk FOREIGN KEY (product_id)
         REFERENCES products.products (id) MATCH SIMPLE
