@@ -40,3 +40,4 @@ const seedCSVRelated = (table) => {
 // seedCSV('photos');
 // seedCSV('cart');
 // seedCSV('features');
+// seedCSV('featuresarr');

@@ -194,3 +194,19 @@ TABLESPACE pg_default;
 
 ALTER TABLE products.features
     OWNER to postgres;
+
+-- Table: products.featuresarr---------------------------------------
+
+-- DROP TABLE products.featuresarr;
+
+CREATE TABLE products.featuresarr
+(
+    id SERIAL,
+    features character varying(50)[] COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT featuresarr_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE products.featuresarr
+    OWNER to postgres;
