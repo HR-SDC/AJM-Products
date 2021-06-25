@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 const path = require('path');
 const client = require('./index');
 
 const seedCSV = (table) => {
-  // ext ? ext : 'csv';
   const source = path.join(__dirname, `../data/${table}.csv`);
 
   client.query(
@@ -17,7 +17,6 @@ const seedCSV = (table) => {
 };
 
 const seedCSVRelated = (table) => {
-  // ext ? ext : 'csv';
   const source = path.join(__dirname, `../data/${table}.csv`);
 
   client.query(
@@ -31,12 +30,12 @@ const seedCSVRelated = (table) => {
     .catch((err) => console.log('err', err));
 };
 
-// seedCSV('products');
-// seedCSV('styles');
-// seedCSV('skus');
-// seedCSV('relatedarr');
-// seedCSVRelated('related');
-// seedCSV('photos');
-// seedCSV('cart');
-// seedCSV('features');
+seedCSV('products');
+seedCSV('styles');
+seedCSV('skus');
+seedCSV('relatedarr');
+seedCSVRelated('related');
+seedCSV('photos');
+seedCSV('cart');
+seedCSV('features');
 seedCSV('featuresarr');
