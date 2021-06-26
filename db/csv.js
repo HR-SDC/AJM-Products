@@ -5,75 +5,76 @@ const LineInputStream = require('line-input-stream');
 
 // ------------- PHOTO CLEANER ------------------------------------
 
-// const cleanPhotos = () => {
-//   const readPath = path.join(__dirname, '../data/photosOrig.csv');
-//   const readStream = LineInputStream(fs.createReadStream(readPath, { flags: 'r' }));
-//   const writePath = path.join(__dirname, '../data/photosClean.csv');
-//   const writeStream = fs.createWriteStream(writePath, { flags: 'w' });
+const cleanPhotos = () => {
+  const readPath = path.join(__dirname, '../data/photosOrig.csv');
+  const readStream = LineInputStream(fs.createReadStream(readPath, { flags: 'r' }));
+  const writePath = path.join(__dirname, '../data/photosClean.csv');
+  const writeStream = fs.createWriteStream(writePath, { flags: 'w' });
 
-//   readStream.setDelimiter('\n');
+  readStream.setDelimiter('\n');
 
-//   readStream.on('line', (line) => {
-//     // console.log('line', line);
-//     if ((line.slice(0, 2) !== 'id') && (line[line.length - 1] !== '"')) {
-//       line += '"';
-//     }
-//     writeStream.write(line + '\n');
-//   });
+  readStream.on('line', (line) => {
+    let newLine = line;
+    if ((line.slice(0, 2) !== 'id') && (line[line.length - 1] !== '"')) {
+      newLine += '"';
+    }
+    writeStream.write(`${newLine}\n`);
+  });
 
-//   writeStream.on('error', (err) => {
-//     console.log('error writing CSV', err);
-//   });
+  writeStream.on('error', (err) => {
+    console.log('error writing CSV', err);
+  });
 
-//   readStream.on('error', (err) => {
-//     console.log('error reading CSV', err);
-//   });
-// };
+  readStream.on('error', (err) => {
+    console.log('error reading CSV', err);
+  });
+};
 
-// cleanPhotos();
+cleanPhotos();
 
-// // ---------------- RELATED CLEANER -------------------------------------
+// ---------------- RELATED CLEANER -------------------------------------
 
-// const cleanRelated = () => {
-//   const readPath = path.join(__dirname, '../data/related.csv');
-//   const readStream = LineInputStream(fs.createReadStream(readPath, { flags: 'r' }));
-//   const writePath = path.join(__dirname, '../data/relatedarr.csv');
-//   const writeStream = fs.createWriteStream(writePath, { flags: 'w' });
+const cleanRelated = () => {
+  const readPath = path.join(__dirname, '../data/related.csv');
+  const readStream = LineInputStream(fs.createReadStream(readPath, { flags: 'r' }));
+  const writePath = path.join(__dirname, '../data/relatedarr.csv');
+  const writeStream = fs.createWriteStream(writePath, { flags: 'w' });
 
-//   readStream.setDelimiter('\n');
+  readStream.setDelimiter('\n');
 
-//   let current = '1';
-//   let related = [];
-//   readStream.on('line', (line) => {
-//     line = line.split(',');
-//     const [id, currentId, relatedId] = line;
+  let current = '1';
+  let related = [];
 
-//     if (id === 'id') {
-//       writeStream.write(`${id},${currentId},${relatedId}\n`);
-//     } else if ((id !== 'id') && (currentId === current) && (relatedId !== '0')) {
-//       related.push(relatedId);
-//     } else if ((id !== 'id') && (currentId !== current) && (relatedId !== '0')) {
-//       writeStream.write(`${current},"{${related}}"\n`);
-//       current = currentId;
-//       related = [];
-//       related.push(relatedId);
-//     }
-//   });
+  readStream.on('line', (line) => {
+    const split = line.split(',');
+    const [id, currentId, relatedId] = split;
 
-//   readStream.on('end', () => {
-//     writeStream.write(`${current},"{${related}}"`);
-//   });
+    if (id === 'id') {
+      writeStream.write(`${id},${currentId},${relatedId}\n`);
+    } else if ((id !== 'id') && (currentId === current) && (relatedId !== '0')) {
+      related.push(relatedId);
+    } else if ((id !== 'id') && (currentId !== current) && (relatedId !== '0')) {
+      writeStream.write(`${current},"{${related}}"\n`);
+      current = currentId;
+      related = [];
+      related.push(relatedId);
+    }
+  });
 
-//   writeStream.on('error', (err) => {
-//     console.log('error writing CSV', err);
-//   });
+  readStream.on('end', () => {
+    writeStream.write(`${current},"{${related}}"`);
+  });
 
-//   readStream.on('error', (err) => {
-//     console.log('error reading CSV', err);
-//   });
-// };
+  writeStream.on('error', (err) => {
+    console.log('error writing CSV', err);
+  });
 
-// cleanRelated();
+  readStream.on('error', (err) => {
+    console.log('error reading CSV', err);
+  });
+};
+
+cleanRelated();
 
 // ---------------- FEATURES CLEANER -------------------------------------
 
@@ -92,7 +93,6 @@ const cleanFeatures = () => {
     const split = line.split(',');
     const [id, productId] = split;
     let [, , feature, value] = split;
-    // let [id, productId, feature, value] = split;
     prodId = productId;
     if (value === 'null') {
       value = 'true';
