@@ -2,8 +2,8 @@ const models = require('../db/models');
 
 const controllers = {
   getPageOfProducts: (req, res) => {
-    models.getPageOfProducts(req, (err, results) => (
-      err ? res.status(400).send(err) : res.status(200).send(results)
+    models.getPageOfProducts(req, (err, data) => (
+      err ? res.status(400).send(err) : res.status(200).send(data)
     ));
   },
 
@@ -18,8 +18,10 @@ const controllers = {
   },
 
   getRelatedProducts: (req, res) => {
-    // models.
-    res.send('hello from getrelated');
+    models.getRelatedProducts(req, (err, data) => (
+      err ? res.status(400).send(err) : res.status(200).send(data)
+    ));
+    // res.send('hello from getrelated');
   },
 
   getCart: (req, res) => {

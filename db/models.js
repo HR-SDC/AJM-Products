@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 const db = require('./index');
 
 const models = {
@@ -16,7 +16,7 @@ const models = {
       if (err) {
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows);
       }
     });
   },
@@ -36,8 +36,15 @@ const models = {
   },
 
   getRelatedProducts: (req, cb) => {
-    // GET /products/:product_id/related
-    // returns array with Ids ofr related products
+    const { product_id } = req.params;
+    const queryStr = `SELECT related FROM products.relatedarr WHERE id=${product_id};`;
+    db.query(queryStr, (err, data) => {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, data.rows[0].related);
+      }
+    });
   },
 
   getCart: (req, cb) => {
