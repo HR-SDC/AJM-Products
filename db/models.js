@@ -48,7 +48,7 @@ const models = {
     // object with product_id, then results, which contains an array of style objects
     // each style object has styleId, name, origPrice, salePrice, Default, and PhotosArr
     // photosArr is array of objects, each with thumbnail url and url
-    const queryStr1 = `SELECT * FROM products.products WHERE id=${product_id};`;
+    // const queryStr1 = `SELECT * FROM products.products WHERE id=${product_id};`;
     // const queryStr2 = (
     //   `SELECT
     //   product_id,
@@ -64,6 +64,8 @@ const models = {
     //    select id as style_id, name, original_price, sale_price, "default" as "default?" from products.styles where product_id=${product_id}
     //    ) t`
     // );
+    console.log('hello from product styles');
+    const { product_id } = req.params;
     const queryStr2 = (`
       SELECT
         array_to_json(array_agg(row_to_json(t)))
@@ -78,11 +80,17 @@ const models = {
           ) d
         ) as photos
         from products.styles
-        where product_id=5
+        where product_id=${product_id}
       ) t
-    `)
+    `);
+    db.query(queryStr2, (err, data) => {
+      if (err) {
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
     // returns array of style objects
-    const { product_id } = req.params;
   },
 
   getRelatedProducts: (req, cb) => {
