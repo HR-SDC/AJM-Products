@@ -38,6 +38,13 @@ TABLESPACE pg_default;
 ALTER TABLE products.products
     OWNER to postgres;
 
+-- DROP INDEX products.index_prod_id;
+
+CREATE INDEX index_prod_id
+    ON products.products USING btree
+    (id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 -- Table: products.styles----------------------------------------
 
 -- DROP TABLE products.styles;
@@ -63,6 +70,20 @@ TABLESPACE pg_default;
 ALTER TABLE products.styles
     OWNER to postgres;
 
+-- DROP INDEX products.index_styles_id;
+
+CREATE INDEX index_styles_id
+    ON products.styles USING btree
+    (id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- DROP INDEX products.index_styles_product_id;
+
+CREATE INDEX index_styles_product_id
+    ON products.styles USING btree
+    (product_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 -- Table: products.photos-----------------------------------------
 
 -- DROP TABLE products.photos;
@@ -86,6 +107,13 @@ TABLESPACE pg_default;
 ALTER TABLE products.photos
     OWNER to postgres;
 
+-- DROP INDEX products.index_style_id;
+
+CREATE INDEX index_style_id
+    ON products.photos USING btree
+    (style_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 -- Table: products.skus------------------------------------------
 
 -- DROP TABLE products.skus;
@@ -108,6 +136,20 @@ TABLESPACE pg_default;
 ALTER TABLE products.skus
     OWNER to postgres;
 
+-- DROP INDEX products.index_skus_id;
+
+CREATE INDEX index_skus_id
+    ON products.skus USING btree
+    (id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- DROP INDEX products.index_skus_style_id;
+
+CREATE INDEX index_skus_style_id
+    ON products.skus USING btree
+    (style_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 -- Table: products.cart-------------------------------------------
 
 -- DROP TABLE products.cart;
@@ -129,6 +171,13 @@ TABLESPACE pg_default;
 
 ALTER TABLE products.cart
     OWNER to postgres;
+
+-- DROP INDEX products.index_cart_user_session_id;
+
+CREATE INDEX index_cart_user_session_id
+    ON products.cart USING btree
+    (user_session_id ASC NULLS LAST)
+    TABLESPACE pg_default;
 
 -- Table: products.related-----------------------------------------
 
@@ -156,6 +205,13 @@ TABLESPACE pg_default;
 ALTER TABLE products.related
     OWNER to postgres;
 
+-- DROP INDEX products.index_related_current_id;
+
+CREATE INDEX index_related_current_id
+    ON products.related USING btree
+    (current_product_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 -- Table: products.relatedarr-------------------------------------
 
 -- DROP TABLE products.relatedarr;
@@ -172,6 +228,12 @@ TABLESPACE pg_default;
 ALTER TABLE products.relatedarr
     OWNER to postgres;
 
+-- DROP INDEX products.index_relatedarr_id;
+
+CREATE INDEX index_relatedarr_id
+    ON products.relatedarr USING btree
+    (id ASC NULLS LAST)
+    TABLESPACE pg_default;
 
 -- Table: products.features---------------------------------------
 
@@ -195,6 +257,13 @@ TABLESPACE pg_default;
 ALTER TABLE products.features
     OWNER to postgres;
 
+-- DROP INDEX products.index_features_product_id;
+
+CREATE INDEX index_features_product_id
+    ON products.features USING btree
+    (product_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
 -- Table: products.featuresarr---------------------------------------
 
 -- DROP TABLE products.featuresarr;
@@ -210,3 +279,10 @@ TABLESPACE pg_default;
 
 ALTER TABLE products.featuresarr
     OWNER to postgres;
+
+-- DROP INDEX products.index_featuresarr_id;
+
+CREATE INDEX index_featuresarr_id
+    ON products.featuresarr USING btree
+    (prod_id ASC NULLS LAST)
+    TABLESPACE pg_default;

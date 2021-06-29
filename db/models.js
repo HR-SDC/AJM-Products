@@ -85,7 +85,7 @@ const models = {
   getRelatedProducts: (req, cb) => {
     const { product_id } = req.params;
     const queryStr = `
-      SELECT ARRAY(SELECT DISTINCT UNNEST(related) ORDER BY 1)
+      SELECT ARRAY(SELECT DISTINCT UNNEST(related) ORDER BY 1) AS related
       FROM products.relatedarr
       WHERE id=${product_id};
     `;
