@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // const path = require('path');
 const db = require('./index');
 
@@ -23,38 +24,6 @@ const models = {
 
   getOneProduct: (req, cb) => {
     const { product_id } = req.params;
-    // const queryStr1 = `SELECT * FROM products.products WHERE id=${product_id};`;
-    // const queryStr2 = `SELECT features FROM products.featuresarr WHERE prod_id=${product_id};`;
-    // db.query(queryStr1, (err, data) => {
-    //   if (err) {
-    //     cb(err);
-    //   } else {
-    //     const product = data.rows[0];
-    //     db.query(queryStr2, (err2, data2) => {
-    //       if (err) {
-    //         cb(err2);
-    //       } else {
-    //         product.features = data2.rows[0];
-    //         cb(null, product);
-    //       }
-    //     });
-    //   }
-    // });
-    // const queryStr3 = `
-    //   SELECT *, (
-    //     SELECT features
-    //     FROM products.featuresarr
-    //     WHERE prod_id=${product_id}
-    //   )
-    //   FROM products.products
-    //   WHERE id=${product_id};`;
-    // db.query(queryStr3, (err, data) => {
-    //   if (err) {
-    //     cb(err);
-    //   } else {
-    //     cb(null, data.rows);
-    //   }
-    // });
     const queryStr4 = `
       SELECT *, (
         SELECT ARRAY_TO_JSON(ARRAY_AGG(ROW_TO_JSON(d))) AS features
@@ -115,7 +84,11 @@ const models = {
 
   getRelatedProducts: (req, cb) => {
     const { product_id } = req.params;
-    const queryStr = `SELECT related FROM products.relatedarr WHERE id=${product_id};`;
+    const queryStr = `
+      SELECT ARRAY(SELECT DISTINCT UNNEST(related) ORDER BY 1)
+      FROM products.relatedarr
+      WHERE id=${product_id};
+    `;
     db.query(queryStr, (err, data) => {
       if (err) {
         cb(err);
@@ -123,6 +96,18 @@ const models = {
         cb(null, data.rows[0].related);
       }
     });
+    // const queryStr1 = `
+    //   SELECT ARRAY_AGG(DISTINCT related_product_id) AS related
+    //   FROM products.related
+    //   WHERE current_product_id=5;
+    // `;
+    // db.query(queryStr1, (err, data) => {
+    //   if (err) {
+    //     cb(err);
+    //   } else {
+    //     cb(null, data.rows[0].related);
+    //   }
+    // });
   },
 
   getCart: (req, cb) => {
