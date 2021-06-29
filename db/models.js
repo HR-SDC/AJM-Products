@@ -23,66 +23,59 @@ const models = {
 
   getOneProduct: (req, cb) => {
     const { product_id } = req.params;
-    const queryStr1 = `SELECT * FROM products.products WHERE id=${product_id};`;
-    const queryStr2 = `SELECT features FROM products.featuresarr WHERE prod_id=${product_id};`;
-    db.query(queryStr1, (err, data) => {
+    // const queryStr1 = `SELECT * FROM products.products WHERE id=${product_id};`;
+    // const queryStr2 = `SELECT features FROM products.featuresarr WHERE prod_id=${product_id};`;
+    // db.query(queryStr1, (err, data) => {
+    //   if (err) {
+    //     cb(err);
+    //   } else {
+    //     const product = data.rows[0];
+    //     db.query(queryStr2, (err2, data2) => {
+    //       if (err) {
+    //         cb(err2);
+    //       } else {
+    //         product.features = data2.rows[0];
+    //         cb(null, product);
+    //       }
+    //     });
+    //   }
+    // });
+    // const queryStr3 = `
+    //   SELECT *, (
+    //     SELECT features
+    //     FROM products.featuresarr
+    //     WHERE prod_id=${product_id}
+    //   )
+    //   FROM products.products
+    //   WHERE id=${product_id};`;
+    // db.query(queryStr3, (err, data) => {
+    //   if (err) {
+    //     cb(err);
+    //   } else {
+    //     cb(null, data.rows);
+    //   }
+    // });
+    const queryStr4 = `
+      SELECT *, (
+        SELECT ARRAY_TO_JSON(ARRAY_AGG(ROW_TO_JSON(d))) AS features
+        FROM (
+          SELECT feature, value
+          FROM products.features
+          WHERE product_id=${product_id}
+        ) d )
+      FROM products.products
+      WHERE id=${product_id};`;
+    db.query(queryStr4, (err, data) => {
       if (err) {
         cb(err);
       } else {
-        const product = data.rows[0];
-        db.query(queryStr2, (err2, data2) => {
-          if (err) {
-            cb(err2);
-          } else {
-            product.features = data2.rows[0];
-            cb(null, product);
-          }
-        });
+        cb(null, data.rows[0]);
       }
     });
   },
 
   getProductStyles: (req, cb) => {
-    // GET /products/:product_id/styles
-    // returns all styles for a given product
-    // object with product_id, then results, which contains an array of style objects
-    // each style object has styleId, name, origPrice, salePrice, Default, and PhotosArr
-    // photosArr is array of objects, each with thumbnail url and url
-    // const queryStr1 = `SELECT * FROM products.products WHERE id=${product_id};`;
-    // const queryStr2 = (
-    //   `SELECT
-    //   product_id,
-    //   ARRAY_AGG (name ORDER BY product_id) results
-    //   FROM products.styles
-    //   WHERE product_id = 5
-    //   GROUP BY product_id;`
-    // );
-    // const queryStr2 = (
-    //   `SELECT
-    //    array_to_json(array_agg(row_to_json(t)))
-    //    FROM (
-    //    select id as style_id, name, original_price, sale_price, "default" as "default?" from products.styles where product_id=${product_id}
-    //    ) t`
-    // );
-    console.log('hello from product styles');
     const { product_id } = req.params;
-    // const queryStr2 = (`
-    //   SELECT
-    //     array_to_json(array_agg(row_to_json(t)))
-    //   FROM (
-    //     select id as style_id, name, original_price, sale_price, "default" as "default?",
-    //     (
-    //       select array_to_json(array_agg(row_to_json(d)))
-    //       from (
-    //         select thumbnail_url, url
-    //         from products.photos
-    //         where style_id=products.styles.id
-    //       ) d
-    //     ) as photos
-    //     from products.styles
-    //     where product_id=${product_id}
-    //   ) t
-    // `);
     const queryStr2 = (`
       SELECT JSON_BUILD_OBJECT(
         'product_id', ${product_id},
