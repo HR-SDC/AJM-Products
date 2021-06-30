@@ -1,15 +1,15 @@
 -- Database: SDCProducts --------------------------------
 
--- DROP DATABASE "SDCProducts";
+DROP DATABASE IF EXISTS "SDCProductsEC2";
 
--- CREATE DATABASE "SDCProducts"
---   WITH
---   OWNER = postgres
---   ENCODING = 'UTF8'
---   LC_COLLATE = 'C'
---   LC_CTYPE = 'C'
---   TABLESPACE = pg_default
---   CONNECTION LIMIT = -1;
+CREATE DATABASE "SDCProducts"
+  WITH
+  OWNER = postgres
+  ENCODING = 'UTF8'
+  LC_COLLATE = 'C'
+  LC_CTYPE = 'C'
+  TABLESPACE = pg_default
+  CONNECTION LIMIT = -1;
 
 -- SCHEMA: products -----------------------------------------
 
