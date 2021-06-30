@@ -1,0 +1,24 @@
+{
+  "name": "systemdesigncapstone",
+  "version": "1.0.0",
+  "description": "sdc_acdk",
+  "scripts": {
+    "start": "nodemon server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "line-input-stream": "^1.0.1",
+    "morgan": "^1.10.0",
+    "node": "^16.3.0",
+    "node-postgres": "^0.6.2",
+    "pg": "^8.6.0",
+    "postgres": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4"
+  }
+}
