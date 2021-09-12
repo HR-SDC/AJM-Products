@@ -1,18 +1,26 @@
 /* eslint-disable camelcase */
-// const path = require('path');
 const db = require('./index');
 
 const models = {
   getPageOfProducts: (req, cb) => {
     const page = req.query.page || 1;
     const count = req.query.count || 5;
+
     let productId;
     if (page > 1) {
       productId = page * 1000;
     } else {
       productId = 1;
     }
-    const queryStr = `SELECT * FROM products.products WHERE id>=${productId} ORDER BY id ASC LIMIT ${count};`;
+
+    const queryStr = `
+      SELECT *
+      FROM products.products
+      WHERE id>=${productId}
+      ORDER BY id ASC
+      LIMIT ${count};
+    `;
+
     db.query(queryStr, (err, data) => {
       if (err) {
         cb(err);
@@ -24,8 +32,10 @@ const models = {
 
   getOneProduct: (req, cb) => {
     const { product_id } = req.params;
+
     const queryStr4 = `
-      SELECT *, (
+      SELECT *,
+      (
         SELECT ARRAY_TO_JSON(ARRAY_AGG(ROW_TO_JSON(d))) AS features
         FROM (
           SELECT feature, value
@@ -33,7 +43,9 @@ const models = {
           WHERE product_id=${product_id}
         ) d )
       FROM products.products
-      WHERE id=${product_id};`;
+      WHERE id=${product_id};
+    `;
+
     db.query(queryStr4, (err, data) => {
       if (err) {
         cb(err);
@@ -45,6 +57,7 @@ const models = {
 
   getProductStyles: (req, cb) => {
     const { product_id } = req.params;
+
     const queryStr2 = (`
       SELECT JSON_BUILD_OBJECT(
         'product_id', ${product_id},
@@ -73,6 +86,7 @@ const models = {
       FROM products.styles
       WHERE product_id=${product_id}
       ) t`);
+
     db.query(queryStr2, (err, data) => {
       if (err) {
         cb(err);
@@ -84,11 +98,13 @@ const models = {
 
   getRelatedProducts: (req, cb) => {
     const { product_id } = req.params;
+
     const queryStr = `
       SELECT ARRAY(SELECT DISTINCT UNNEST(related) ORDER BY 1) AS related
       FROM products.relatedarr
       WHERE id=${product_id};
     `;
+
     db.query(queryStr, (err, data) => {
       if (err) {
         cb(err);
@@ -96,31 +112,8 @@ const models = {
         cb(null, data.rows[0].related);
       }
     });
-    // const queryStr1 = `
-    //   SELECT ARRAY_AGG(DISTINCT related_product_id) AS related
-    //   FROM products.related
-    //   WHERE current_product_id=5;
-    // `;
-    // db.query(queryStr1, (err, data) => {
-    //   if (err) {
-    //     cb(err);
-    //   } else {
-    //     cb(null, data.rows[0].related);
-    //   }
-    // });
   },
 
-  getCart: (req, cb) => {
-    // GET /cart
-    // returns array of objects, each obj has sku_id, and count\
-    // need to get user session Id in order to know what cart to get
-  },
-
-  addToCart: (req, cb) => {
-    // POST /cart
-    // Body parameter sku_id - ID for product being added to cart
-    // need to get user session Id somehow, and if they're active
-  },
 };
 
 module.exports = models;
