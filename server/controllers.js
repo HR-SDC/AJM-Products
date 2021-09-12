@@ -32,7 +32,7 @@ const controllers = {
   },
 
   addToCart: (req, res) => {
-    models.addToCart(req, (err, data) => (
+    models.addToCart(req, (err) => (
       err ? res.status(400).send(err) : res.status(200).send('Added to cart')
     ));
   },
